@@ -10,12 +10,14 @@ public class Cours implements CRUD{
     private String nom;
     private int code ;
     private Animateur animateur;
+    public Classe classe;
     public static List<Cours>cours = new ArrayList<Cours>();
 
-    public Cours(String nom, Animateur animateur,int code) {
+    public Cours(String nom, Animateur animateur,int code,Classe classe) {
         this.setNom(nom); 
         this.setAnimateur(animateur);
         this.setCode(code);
+        this.classe=classe;
     }
     
     public Cours() {
@@ -63,8 +65,8 @@ public class Cours implements CRUD{
     	System.out.println("************** Cour : "+this.getNom()+" *************** \n");
     	System.out.println("\t code : "+this.getCode());
     	System.out.println("\t Nom : "+this.getNom());
-    	System.out.println("\t Animateur Responsable : \n");
-    	this.getAnimateur().toString();
+    	System.out.println("\t Animateur Responsable : "+this.animateur.getNom()+" "+this.animateur.getPrenom()+"\n");
+    	
     	
     	
     	return "" ;
@@ -75,6 +77,8 @@ public class Cours implements CRUD{
     	String nomCours ;
     	int idAnimateur;
     	int code;
+    	int idClasse;
+    	Classe classe = new Classe();
     	Animateur animateur = new Animateur();
     	Scanner scanner = new Scanner(System.in);
     	System.out.println("Entrez nom Cours");
@@ -132,8 +136,49 @@ public class Cours implements CRUD{
     	}
     	
     	
+    	while(true) {
+    		try {
+    			System.out.println("id classe : ");	
+    			if(scanner.hasNext()) {
+    				idClasse = Integer.parseInt(scanner.next());//scanner.nextInt(); 
+    				
+    				//verifier si le code existe dans d'autres cours 
+    				if(Classe.classes.size()==0) {
+    					
+    					for(Classe classeLocale:Classe.classes) {
+        					if(classeLocale.id==idClasse) {
+        						classe=classeLocale;
+        						
+        						break;
+        					}
+        					else {
+        						System.out.println("id de classe invalide");
+        						
+        					}
+        				}
+    					
+    				}
+    				else {
+    					System.out.println("Liste de Classes Est Vide");
+    					break;
+    				}
+    				
+    				
+    				
+        	    	
+    			}
+    	    	
+			} catch (Exception e) {
+				
+				System.out.println("id de classe  doit etre un entier");
+			
+				
+			}
+    	}
     	
-    	return new Cours(nomCours , animateur,code);
+    	
+    	
+    	return new Cours(nomCours , animateur,code,classe);
     }
     
 	@Override
@@ -188,35 +233,43 @@ public class Cours implements CRUD{
     				 code = Integer.parseInt(scanner.next());
     				 //optenir le cours specifique au code  donner depuis le client 
     				Cours  cour = new Cours();
+    				
+    				if(cours.size()!=0) {
+    					
+    					
     					for(Cours localCours:cours) {
-    						if(cour.code==code) {
+    						
+    						if(localCours.code==code) {
     							cour=localCours;
-    							cour.toString();
-    							break;
+    							//cree un nouveau eleve avec des nouveau attributs 
+    		    				Cours nouveauCour = getUserInput();
+    		    				
+    		    				
+    		    	    	    	//remplir l'encien eleve avec le nouveau eleve :) 
+    		    	    	    	
+    		    				cour.setNom(nouveauCour.getNom());
+    		    				cour.setCode(nouveauCour.getCode());
+    		    				cour.setAnimateur(nouveauCour.getAnimateur());
+    		    				
+    		    	    	    	//afficher un message de succés
+    		    	    	    	System.out.println("cours modifier avec succes");
+    		    	    			
+    		    				break; // sortir le la boocle a la fin pour revenir vers le menu principale 
+    							
     						}
     						else {
-								System.out.println("cours introuvable");
-								break;
+								throw new Exception();
 							}
     						
     					}
+    					
+    					
+    				}else {
+    					System.out.println("Liste des Cours est Vide");
+    					break;
+    				}
+    					
     						
-    	    			
-    				//cree un nouveau eleve avec des nouveau attributs 
-    				Cours nouveauCour = getUserInput();
-    				
-    				
-    	    	    	//remplir l'encien eleve avec le nouveau eleve :) 
-    	    	    	
-    				cour.setNom(nouveauCour.getNom());
-    				cour.setCode(nouveauCour.getCode());
-    				cour.setAnimateur(nouveauCour.getAnimateur());
-    				
-    	    	    	//afficher un message de succés
-    	    	    	System.out.println("cours modifier avec succes");
-    	    			
-    				break; // sortir le la boocle a la fin pour revenir vers le menu principale 
-    				
     			}
     	    	
     		}
@@ -241,18 +294,31 @@ public class Cours implements CRUD{
     	
 			
 			try {
+				
 				Scanner scanner = new Scanner(System.in);
 				System.out.println("entrez le code du cours  a supprimer : ");
 				int code =Integer.parseInt(scanner.nextLine()) ;
-				for(Cours cour:cours) {
-					if (cour.code==code) {
-						cours.remove(cour);
-						System.out.println("Cours : "+code+" a ete bien supprime ...");
-						break;
+				if(cours.size()!=0) {
+					for(Cours cour:cours) {
+						if (cour.code==code) {
+							System.out.println("****-");
+							cours.remove(cour);
+							System.out.println("Cours : "+code+" a ete bien supprime ...");
+							break;
+							
+						}
+						else {
+							throw new Exception();//forcer l'application a genger une exception si le cours n'existe pas
+						}
+					}
+					}
+					else {
+						System.out.println("Pas de cours");
+						return;
 						
 					}
-				}
-				
+					
+					
 				
 			} catch (Exception e) {
 				System.out.println("Cours  n'existe pas");

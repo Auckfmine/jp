@@ -8,7 +8,7 @@ public class Personne {
     private String prenom;
     private Date dateNaissance;
     private Adresse adresse ;
-    private Classe niveauScolaire;
+    private String niveauScolaire;
     
     private int cin;
     private int numeroTelephone;
@@ -57,7 +57,7 @@ public class Personne {
     
     //l'eleve
 
-    public Personne (String nom , String prenom ,Personne pere,Personne mere,Adresse adresse ,Classe niveauScolaire ,Date dateNaissance) //eleve
+    public Personne (String nom , String prenom ,Personne pere,Personne mere,Adresse adresse ,String niveauScolaire ,Date dateNaissance) //eleve
     {
         this.setNom(nom);
         this.setPrenom(prenom);
@@ -141,11 +141,11 @@ public class Personne {
         this.adresse = adresse;
     }
 
-    public Classe getNiveauScolaire() {
+    public String getNiveauScolaire() {
         return niveauScolaire;
     }
 
-    public void setNiveauScolaire(Classe niveauScolaire) {
+    public void setNiveauScolaire(String niveauScolaire) {
         this.niveauScolaire = niveauScolaire;
     }
 

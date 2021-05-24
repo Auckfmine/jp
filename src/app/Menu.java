@@ -200,65 +200,16 @@ public class Menu {
                 break;
             case 2:
                 System.out.println("Methode modifier classe");
+                classe.toString();
                 break;
             case 3:
                 System.out.println("methode supprimer classe");
+                classe.delete();
                 break;
             case  4:
                 System.out.println("methode lister classe");
                 classe.listAll();
-            case 5 :
-            	System.out.println("Ajouter des eleves Au classe");
-            	int id;
-            	String nomClasse;
-            	while(true) {
-            		try {
-            			System.out.println("Donner l'id de  l'eleve a Ajouter");
-						 id = Integer.parseInt(scanner.nextLine());
-						break;
-					} catch (Exception e) {
-						System.out.println(e);
-					}
-            	}
-            	
-            	while(true) {
-            		try {
-            			System.out.println("Donner le nom  de  classe  a Remplir avec l'eleve : ");
-            			nomClasse = scanner.nextLine();
-						break;
-					} catch (Exception e) {
-						System.out.println(e);
-					}
-            	}
-            	Eleve eleveeEleve = new Eleve() ;
-            	for (Eleve elevee : eleve.eleves) {
-            		if(elevee.id==id) {
-            			eleveeEleve = elevee ;
-            		}
-            		
-            	}
-            	
-            	for(Classe classee:classe.classes) {
-            		if(classee.getNom()==nomClasse) {
-            			classee.eleves.add(eleveeEleve);
-            			eleveeEleve.toString();
-            		}
-            	}
-            	
-            	
-                
-            case 6 : 
-            	System.out.println("Retirer des eleves Du classe");
-            case 7 :
-            	System.out.println("Ajouter des Animateurs Au classe");
-                break;
-            case 8 : 
-            	System.out.println("Retirer des Animateurs Du classe");
-            case 9 :
-            	System.out.println("Ajouter des Cours Au classe");
-                break;
-            case 10 : 
-            	System.out.println("Retirer des Cours Du classe");	
+            
 
             default:
                 System.out.println("choix invalide");

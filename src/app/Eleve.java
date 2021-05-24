@@ -28,7 +28,7 @@ public class Eleve extends Personne implements CRUD {
     	
     }
 
-    public Eleve(String nom , String prenom ,Personne pere,Personne mere,Adresse adresse ,Classe niveauScolaire, Date dateNaissance ){
+    public Eleve(String nom , String prenom ,Personne pere,Personne mere,Adresse adresse ,String niveauScolaire, Date dateNaissance ){
         super(nom, prenom, pere, mere, adresse, niveauScolaire,dateNaissance);
         
         this.id=count.incrementAndGet();
@@ -84,7 +84,7 @@ public class Eleve extends Personne implements CRUD {
     	int numeroTelephone ;
     	Adresse adresse ; 
     	int numeroRue; String designation; String ville; int codePostale; String gouvernorat;
-    	Classe niveauScolaire ; 
+    	String niveauScolaire ; 
     	
     	Scanner scanner = new Scanner(System.in);
     	System.out.println("nom eleve : ");
@@ -178,29 +178,9 @@ public class Eleve extends Personne implements CRUD {
     	
     	System.out.println("gouvernorat : ");
     	gouvernorat = scanner.next();
-    	while(true) {
-    		try {
-    			System.out.println("niveau scolaire : ");
-    			if(scanner.hasNext()) {
-    				String className = scanner.next();
-    				
-    				
-    				
-    					niveauScolaire = new Classe(className);
-    					
-    					break;
-    				
-    				
-    				
-    				//classe existe ou non 
-        	    	
-    			}
-    			
-    	    	
-			} catch (Exception e) {
-				System.out.println("niveau scolaire   invalide");
-			}
-    	}
+    	
+    	System.out.println("niveau scolaire (classe) : ");
+    	niveauScolaire = scanner.next();
     	
     	// retourner un object eleve
     	
@@ -281,26 +261,48 @@ public class Eleve extends Personne implements CRUD {
     			if(scanner.hasNext()) {
     				 id = Integer.parseInt(scanner.next());
     				 //optenir l'eleve spécifique a l'id donner depuis le client 
-    				Eleve  eleve = eleves.get(id);
-    	    			
-    				//crée un nouveau eleve avec des nouveau attributs 
-    				Eleve nouveauEleve = getUserInput();
+    				Eleve  eleve = new Eleve();
+    				if(eleves.size()!=0) {
+    					
+    					for(Eleve eleveLocale:eleves) {
+        					
+        					if(eleveLocale.id==id) {
+        						eleve=eleveLocale;
+        						
+        						
+        						//crée un nouveau eleve avec des nouveau attributs 
+        	    				Eleve nouveauEleve = getUserInput();
+        	    				
+        	    				
+        	    	    	    	//remplir l'encien eleve avec le nouveau eleve :) 
+        	    	    	    	
+        	    				eleve.setNom(nouveauEleve.getNom());
+        	    		    	eleve.setPrenom(nouveauEleve.getPrenom());
+        	    		    	eleve.setPere(nouveauEleve.getPere());
+        	    		    	eleve.setMere(nouveauEleve.getMere());
+        	    		    	eleve.setAdresse(nouveauEleve.getAdresse());
+        	    		    	eleve.setNiveauScolaire(nouveauEleve.getNiveauScolaire());
+        	    		    	eleve.setDateNaissance(nouveauEleve.getDateNaissance());
+        	    	    	    	
+        	    	    	    	//afficher un message de succés
+        	    	    	    	System.out.println("succés");
+        	    	    			
+        	    				break; // sortir le la boocle a la fin pour revenir vers le menu principale 
+        					}
+        					
+        					else {
+        						throw new Exception(); //forcer l'application a generer une exception si on ne trouve pas un eleve
+        					}
+        					
+        				}
+    				}
+    				else {
+    					System.out.println("Liste d'eleves est Vide . ");
+    					break;
+    				}
     				
-    				
-    	    	    	//remplir l'encien eleve avec le nouveau eleve :) 
-    	    	    	
-    				eleve.setNom(nouveauEleve.getNom());
-    		    	eleve.setPrenom(nouveauEleve.getPrenom());
-    		    	eleve.setPere(nouveauEleve.getPere());
-    		    	eleve.setMere(nouveauEleve.getMere());
-    		    	eleve.setAdresse(nouveauEleve.getAdresse());
-    		    	eleve.setNiveauScolaire(nouveauEleve.getNiveauScolaire());
-    		    	eleve.setDateNaissance(nouveauEleve.getDateNaissance());
-    	    	    	
-    	    	    	//afficher un message de succés
-    	    	    	System.out.println("succés");
     	    			
-    				break; // sortir le la boocle a la fin pour revenir vers le menu principale 
+    				
     				
     			}
     	    	
@@ -332,15 +334,27 @@ public class Eleve extends Personne implements CRUD {
 				Scanner scanner = new Scanner(System.in);
 				System.out.println("entrez l'Id de l'eleve a supprimer : ");
 				int id =Integer.parseInt(scanner.next()) ;
-				for(Eleve eleve :eleves) {
-					if(eleve.id==id) {
-						eleves.remove(eleve);
-						System.out.println("Eleve "+id+" a ete bien supprime ...");
-						break;
+				if(eleves.size()!=0) {
+					for(Eleve eleve :eleves) {
+						if(eleve.id==id) {
+							eleves.remove(eleve);
+							System.out.println("Eleve "+id+" a ete bien supprime ...");
+							break;
+						}
+						else {
+							throw new Exception(); // forcer l'application a generer une exception si il ya pas d'object eleve 
+						}
 					}
+					
+					
+				}
+				else {
+					System.out.println("liste d'eleves vide .");
+					return;
 				}
 				
-				System.out.println("eleve n'existe pas");
+				
+				
 				
 			} catch (Exception e) {
 				System.out.println("eleve n'existe pas");

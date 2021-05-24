@@ -3,181 +3,162 @@ package app;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class Classe implements CRUD{
+public class Classe implements CRUD {
 
-    private String nom;
-    public List<Eleve>eleves = new ArrayList<Eleve>();
-    public List<Cours>cours = new ArrayList<Cours>();
-    public List<Animateur>animateurs = new ArrayList<Animateur>();
-    public static List<Classe> classes = new ArrayList<Classe>();
-    Eleve eleve = new Eleve();
-    Animateur animateur = new Animateur();
-    
-public Classe(String nom) {
-	this.setNom(nom);
-}
-    public Classe(String nom,List<Eleve> eleves) {
-    	this.setNom(nom);
-    	this.eleves = eleves;
-    }
-    public Classe() {
-    	
-    }
-   
-    
-    public Classe(String nom,List<Eleve> eleves,List<Animateur> animateurs){
-        this.animateurs=animateurs;
-        this.eleves = eleves;
-        this.setNom(nom);
-    }
-    
-    
-    
-    
-    public Boolean verifClass(String nom) {
-    	Boolean result=false;
-    	if(classes.contains(this.nom)) {
-    		result = true;
-    	}
-    	
-    	return result;
-    }
+	private String nom;
+	public List<Eleve> eleves = Eleve.eleves;
+	public List<Cours> cours = Cours.cours;
+	public List<Animateur> animateurs = new ArrayList<Animateur>();
+	public static List<Classe> classes = new ArrayList<Classe>();
+	private static final AtomicInteger count = new AtomicInteger(-1);
+	public int id;
+	Eleve eleve = new Eleve();
+	Animateur animateur = new Animateur();
 
-    public String getNom() {
-        return nom;
-    }
+	public Classe() {
 
-    public void setNom(String nom) {
-        this.nom = nom;
-    }
+	}
 
-   
-    
+	public Classe(String nom) {
+
+		this.setNom(nom);
+		// ajouter les eleves qui ont un niveau scolaire egale au nom de cette classe
+		// dÃ©s l'initialisation du classe
+		List<Eleve> eleves2 = new ArrayList<Eleve>();
+		List<Cours> cours2 = new ArrayList<Cours>();
+		for (Eleve eleve : eleves) {
+			if (eleve.getNiveauScolaire().equals(nom)) {
+				eleves2.add(eleve);
+			}
+		}
+
+		this.eleves = eleves2;
+		
+		for (Cours cour : cours) {
+			if (cour.classe.id==this.id) {
+				cours2.add(cour);
+			}
+		}
+		
+		this.cours = cours2;
+		
+
+		this.id = count.incrementAndGet();
+
+	}
+
+	public String getNom() {
+		return nom;
+	}
+
+	public void setNom(String nom) {
+		this.nom = nom;
+	}
+
+	@Override
+	public String toString() {
+		for (Eleve eleve : this.eleves) {
+			System.out.println(eleve.getNom());
+		}
+		
+		for(Cours cour:this.cours) {
+			System.out.println(cour.getNom());
+		}
+		return "";
+	}
+
 	@Override
 	public void add() {
-		
-		//pour ajouter une classe on doit donner le nom du classe  la liste des eleves de cette classe , liste des animateurs dans cette classe et la liste des actitivtées 
-		String nom;
-		int idEleve;
-		int idAnimateur;
-		
-		Scanner scanner = new Scanner(System.in);
+
 		try {
-			System.out.println("entrez le nom du classe : ");
+			String nom;
+			Scanner scanner = new Scanner(System.in);
+			System.out.println("donner le nom de la  classe");
 			nom = scanner.next();
-			while(true) {
-				
-				try {
-					System.out.println("entrer l'id de l'eleve a ajouter dans cette classe ");
-					if(scanner.hasNext()) {
-						idEleve = Integer.parseInt(scanner.next());
-						
-						if(eleve.getEleveById(idEleve)==null) {
-							System.out.println("acun eleve corrrespond a cette id ");
-							
-						}
-						
-						else {
-							Eleve eleveeEleve = eleve.getEleveById(idEleve);
-							eleveeEleve.toString();
-							eleves.add(eleveeEleve);
-							break;
-						}
-						
-						
-					}
-					
-					
-				} catch (Exception e) {
-					System.out.println("l'id doit etre un entier");
-				}
-			}
-			
-			while(true) {
-				
-				try {
-					System.out.println("entrer l'id de l'animateur a ajouter dans  cette classe ");
-					if(scanner.hasNext()) {
-						idAnimateur = Integer.parseInt(scanner.next());
-						if(animateur.getAnimateurById(idAnimateur)==null) {
-							System.out.println("acun animateur corrrespond a cette id ");
-							
-						}
-						
-						else {
-							Animateur anim = animateur.getAnimateurById(idAnimateur);
-							anim.toString();
-							animateurs.add(anim);
-							break;
-						}
-						
-						
-					}
-					
-					
-				} catch (Exception e) {
-					System.out.println("l'id doit etre un entier");
-				}
-			}
-			
-			//check if student with given id exists 
-			
-			
-			
-			
-			
-			Classe classe = new Classe(nom,eleves);
+
+			Classe classe = new Classe(nom);
+
+			classe.toString();
+
 			classes.add(classe);
-			
-			System.out.println("\n \n classe ajoutee avec succes\n");
-		}
-		catch(Exception e) {
+			System.out.println("Classe ajoutee");
+		} catch (Exception e) {
+			e.printStackTrace();
 			System.out.println("Erreur");
 		}
-		
-		
+
 	}
+
 	@Override
 	public void update() {
-		// TODO Auto-generated method stub
-		
+		this.toString();
 	}
+
 	@Override
 	public void delete() {
-		// TODO Auto-generated method stub
-		
+		/*
+		 * TODO :
+		 * 
+		 * entrez l'id de la classe depuis le console
+		 * 
+		 * accï¿½dez ala liste des classes et supprimer la classe qui a le meme id que
+		 * celle entrï¿½e
+		 */
+
+		try {
+			Scanner scanner = new Scanner(System.in);
+			System.out.println("entrez l'Id de la classe  a supprimer : ");
+			int id = Integer.parseInt(scanner.next());
+			if (classes.size() != 0) {
+				for (Classe classe : classes) {
+					if (classe.id == id) {
+						classes.remove(eleve);
+						System.out.println("Classe " + id + " a ete bien supprime ...");
+						break;
+					} else {
+						throw new Exception(); // forcer l'application a generer une exception si il ya pas d'object
+												// eleve
+					}
+				}
+
+			} else {
+				System.out.println("liste des classe vide .");
+				return;
+			}
+
+		} catch (Exception e) {
+			System.out.println("classe n'existe pas");
+		}
+
 	}
+
 	@Override
 	public void listAll() {
-		
-try {
-    		
-    		//verifier si la liste d'eleves est vide tout dabord
-    		if(classes.size()==0) {
-    			System.out.println("Liste des classes est Vide");
-    			return;
-    		}
-    		
-    		//si la liste d'eleves nest pas vide  donc on peut  parcourir
-    		for(Classe classe : classes ) {
-    			
-					
-					System.out.println(classe.getNom()); // toString() ici permet l'affichage de l'eleve  
-    			
-        		
-        	}
+
+		try {
+
+			// verifier si la liste d'eleves est vide tout dabord
+			if (classes.size() == 0) {
+				System.out.println("Liste des classes est Vide");
+				return;
+			}
+
+			// si la liste d'eleves nest pas vide donc on peut parcourir
+			for (Classe classe : classes) {
+
+				System.out.println(classe.getNom()); // toString() ici permet l'affichage de l'eleve
+				for (Eleve eleve : classe.eleves) {
+					System.out.println(eleve.toString());
+				}
+
+			}
 
 		} catch (Exception e) {
 			System.out.println("Erreur Survenu Veuillez ressayer");
 		}
-    	
-		
+
 	}
-    
-    
-    
-    
-    
-    
+
 }
