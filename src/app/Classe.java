@@ -9,11 +9,12 @@ public class Classe implements CRUD {
 
 	private String nom;
 	public List<Eleve> eleves = Eleve.eleves;
-	public List<Cours> cours = Cours.cours;
+	//public List<Cours> cours = Cours.cours;
 	public List<Animateur> animateurs = new ArrayList<Animateur>();
 	public static List<Classe> classes = new ArrayList<Classe>();
+	
 	private static final AtomicInteger count = new AtomicInteger(-1);
-	public int id;
+	public int id;static
 	Eleve eleve = new Eleve();
 	Animateur animateur = new Animateur();
 
@@ -27,7 +28,6 @@ public class Classe implements CRUD {
 		// ajouter les eleves qui ont un niveau scolaire egale au nom de cette classe
 		// dés l'initialisation du classe
 		List<Eleve> eleves2 = new ArrayList<Eleve>();
-		List<Cours> cours2 = new ArrayList<Cours>();
 		for (Eleve eleve : eleves) {
 			if (eleve.getNiveauScolaire().equals(nom)) {
 				eleves2.add(eleve);
@@ -36,17 +36,20 @@ public class Classe implements CRUD {
 
 		this.eleves = eleves2;
 		
-		for (Cours cour : cours) {
-			if (cour.classe.id==this.id) {
-				cours2.add(cour);
-			}
-		}
-		
-		this.cours = cours2;
-		
 
 		this.id = count.incrementAndGet();
 
+	}
+	
+	public Classe getClasseById(int id) {
+
+		for (Classe classe : classes) {
+			if (classe.id == id) {
+				return classe;
+			}
+		}
+
+		return null;
 	}
 
 	public String getNom() {
@@ -61,11 +64,10 @@ public class Classe implements CRUD {
 	public String toString() {
 		for (Eleve eleve : this.eleves) {
 			System.out.println(eleve.getNom());
+		
 		}
 		
-		for(Cours cour:this.cours) {
-			System.out.println(cour.getNom());
-		}
+		
 		return "";
 	}
 
@@ -74,18 +76,21 @@ public class Classe implements CRUD {
 
 		try {
 			String nom;
+			String coursNom;
 			Scanner scanner = new Scanner(System.in);
 			System.out.println("donner le nom de la  classe");
 			nom = scanner.next();
+			
 
 			Classe classe = new Classe(nom);
+			
+			
 
 			classe.toString();
 
 			classes.add(classe);
 			System.out.println("Classe ajoutee");
 		} catch (Exception e) {
-			e.printStackTrace();
 			System.out.println("Erreur");
 		}
 
@@ -93,7 +98,7 @@ public class Classe implements CRUD {
 
 	@Override
 	public void update() {
-		this.toString();
+		
 	}
 
 	@Override
@@ -148,7 +153,8 @@ public class Classe implements CRUD {
 			// si la liste d'eleves nest pas vide donc on peut parcourir
 			for (Classe classe : classes) {
 
-				System.out.println(classe.getNom()); // toString() ici permet l'affichage de l'eleve
+				System.out.println("Nom de la classe : "+classe.getNom()); // toString() ici permet l'affichage de l'eleve
+				System.out.println("Les Eleves Dans cette classe : \n");
 				for (Eleve eleve : classe.eleves) {
 					System.out.println(eleve.toString());
 				}

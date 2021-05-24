@@ -11,6 +11,7 @@ public class Menu {
     Animateur animateur = new Animateur();
     Classe classe = new Classe();
     Cours cours = new Cours();
+    Frais frais = new Frais();
 
     
     // outil pour  afficher plusieur menu sans repitition de code 
@@ -37,6 +38,7 @@ public class Menu {
         System.out.println("\t 3-Gestion Classes");
         System.out.println("\t 4-Gestion Cours/Activité");
         System.out.println("\t 5-Statistiques de l'ecole");
+        System.out.println("\t 6-Factures");
         System.out.println("\t 0-Exit \n");
         System.out.println("*****************************************");
 
@@ -73,8 +75,11 @@ public class Menu {
                 gestionCours();  // redirection vers le menu des cours
                 break;
             case  5:
-                Statistique.showStatistiques(); //Affichage des statistiques De L'ecole
-                break;    
+                Statistique.showStatistiques(); // redirection vers le menu des Statistiques
+                break;
+            case  6:
+                gestionFactures(); // redirection vers le menu des Factures
+                break; 
 
             default:		//dans le cas contraire un message d'erreur doit etre afficher au client 
                 System.out.println("choix invalid");
@@ -254,6 +259,51 @@ public class Menu {
             case  4:
                 System.out.println("methode lister cours");
                 cours.listAll();
+                break;
+
+            default:
+                System.out.println("choix invalide");
+                break;
+        }
+    }
+    
+    public void gestionFactures(){
+        afficherMenu("facture"); //afficher le menu des factures
+
+
+
+        while (true){
+            try{
+                System.out.println("donner votre choix");
+                choix = Integer.parseInt(scanner.nextLine());
+                break;
+            }
+            catch (Exception e){
+                System.out.println("choix invalide");
+                choix=-1;
+                break;
+            }
+        }
+
+        switch (choix){
+            case 0:
+                MainMenu();
+                break;
+            case 1:
+                System.out.println(" Methode ajouter facture");
+                frais.add();
+                break;
+            case 2:
+                System.out.println("Methode modifier facture");
+                frais.update();
+                break;
+            case 3:
+                System.out.println("methode supprimer facture");
+                frais.delete();
+                break;
+            case  4:
+                System.out.println("methode lister facture");
+                frais.listAll();
                 break;
 
             default:

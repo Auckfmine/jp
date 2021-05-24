@@ -10,14 +10,12 @@ public class Cours implements CRUD{
     private String nom;
     private int code ;
     private Animateur animateur;
-    public Classe classe;
     public static List<Cours>cours = new ArrayList<Cours>();
 
-    public Cours(String nom, Animateur animateur,int code,Classe classe) {
+    public Cours(String nom, Animateur animateur,int code) {
         this.setNom(nom); 
         this.setAnimateur(animateur);
         this.setCode(code);
-        this.classe=classe;
     }
     
     public Cours() {
@@ -72,13 +70,24 @@ public class Cours implements CRUD{
     	return "" ;
     }
     
+    
+    public Cours getCoursByCode(int code) {
+
+		for (Cours cour : cours) {
+			if (cour.code == code) {
+				return cour;
+			}
+		}
+
+		return null;
+	}
+    
     public Cours getUserInput() {
     	
     	String nomCours ;
     	int idAnimateur;
     	int code;
     	int idClasse;
-    	Classe classe = new Classe();
     	Animateur animateur = new Animateur();
     	Scanner scanner = new Scanner(System.in);
     	System.out.println("Entrez nom Cours");
@@ -136,49 +145,10 @@ public class Cours implements CRUD{
     	}
     	
     	
-    	while(true) {
-    		try {
-    			System.out.println("id classe : ");	
-    			if(scanner.hasNext()) {
-    				idClasse = Integer.parseInt(scanner.next());//scanner.nextInt(); 
-    				
-    				//verifier si le code existe dans d'autres cours 
-    				if(Classe.classes.size()==0) {
-    					
-    					for(Classe classeLocale:Classe.classes) {
-        					if(classeLocale.id==idClasse) {
-        						classe=classeLocale;
-        						
-        						break;
-        					}
-        					else {
-        						System.out.println("id de classe invalide");
-        						
-        					}
-        				}
-    					
-    				}
-    				else {
-    					System.out.println("Liste de Classes Est Vide");
-    					break;
-    				}
-    				
-    				
-    				
-        	    	
-    			}
-    	    	
-			} catch (Exception e) {
-				
-				System.out.println("id de classe  doit etre un entier");
-			
-				
-			}
-    	}
     	
     	
     	
-    	return new Cours(nomCours , animateur,code,classe);
+    	return new Cours(nomCours , animateur,code);
     }
     
 	@Override
